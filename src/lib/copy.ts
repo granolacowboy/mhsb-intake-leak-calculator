@@ -36,7 +36,7 @@ export const COPY = {
     },
     answerRate: {
       label: "Calls and inquiries you actually answer",
-      help: "Clio 2024 found only about 40 percent of firms answered a prospective client call, and 48 percent were unreachable by phone.",
+      help: "Clio 2024 found only about 40 percent of firms answered a prospective client call, and 48 percent were essentially unreachable by phone.",
     },
     responseTime: {
       label: "Typical time to first response",
@@ -56,7 +56,7 @@ export const COPY = {
     },
     advancedToggle: "Adjust benchmarks and close rate",
     advancedIntro:
-      "These are the improved targets the estimate compares against, plus the rate at which signed matters become paying work. Every one is editable.",
+      "These are the improved targets the estimate compares against, plus the rate at which signed matters become paying work. All of them are assumptions, and every one is editable.",
     targetPrefix: "Target",
     closeRate: {
       label: "Signed matters that become paying work",
@@ -74,6 +74,8 @@ export const COPY = {
     capturedSuffix: "per year in signed matters.",
     mattersLabel: "Recoverable signed matters per year",
     breakdownHeading: "Where the money leaks",
+    basisNote:
+      "Only the current answer rate has a primary source (Clio 2024). Every figure here, including the dollar amounts, also depends on assumptions you can change.",
     shareSuffix: "of the total",
     emptyState:
       "Enter your numbers above to see the estimate. At zero inquiries there is nothing to recover.",
@@ -105,10 +107,11 @@ export const COPY = {
 
   badges: {
     sourced: "Sourced",
-    sourcedTitle: "Backed by a dated, cited source.",
+    sourcedTitle:
+      "The default here is drawn from a dated, cited source (Clio 2024). Your own number replaces it.",
     assumption: "Assumption",
     assumptionTitle:
-      "No primary source exists for this figure. It is a starting point. Replace it with your own.",
+      "No primary source exists for this default. It is a starting point. Replace it with your own.",
   },
 
   actions: {
