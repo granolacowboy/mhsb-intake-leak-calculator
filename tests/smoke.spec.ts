@@ -68,6 +68,19 @@ test("zero inquiries shows the empty state and a zero headline", async ({
   await expect(page.locator("#empty-note")).toBeVisible();
 });
 
+test("print view hides the form and lists the figures entered", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.emulateMedia({ media: "print" });
+  await expect(page.locator("#calc-form")).toBeHidden();
+  // The print-only summary is populated by the controller on load.
+  const dtCount = await page.locator("#print-inputs-dl dt").count();
+  expect(dtCount).toBeGreaterThanOrEqual(8);
+  await expect(page.locator("#headline-number")).toBeVisible();
+  await page.screenshot({ path: "docs/screenshot-print.png", fullPage: true });
+});
+
 test("the CTA links to the diagnostic URL constant", async ({ page }) => {
   await page.goto("/");
   const cta = page.locator("a.btn-cta");
