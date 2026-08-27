@@ -127,6 +127,15 @@ describe("computeLeak - edge cases and guards", () => {
     expect(r.ev).toBe(0);
   });
 
+  it("is total: null, undefined, and empty inputs do not throw", () => {
+    for (const bad of [null, undefined, {}, { current: null }, { target: null }]) {
+      const r = computeLeak(bad as unknown as Inputs);
+      expect(r.headlineLeak).toBe(0);
+      expect(Number.isFinite(r.headlineLeak)).toBe(true);
+      expect(r.stages).toHaveLength(5);
+    }
+  });
+
   it("absurd overrides clamp instead of overflowing", () => {
     const r = computeLeak({
       ...clone(DEFAULTS),

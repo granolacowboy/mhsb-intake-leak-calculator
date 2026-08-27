@@ -89,9 +89,6 @@ a:hover {
   outline-offset: 2px;
   border-radius: 3px;
 }
-.on-dark :focus-visible {
-  outline-color: var(--white);
-}
 
 /* Layout */
 .wrap {
@@ -241,6 +238,9 @@ details.advanced > summary {
   display: flex;
   align-items: center;
 }
+details.advanced > summary:hover {
+  color: var(--slate-deep);
+}
 details.advanced[open] > summary {
   border-bottom: 1px solid var(--border);
   margin-bottom: 0.6rem;
@@ -301,6 +301,7 @@ button {
   text-decoration: none;
   border: 1px solid var(--coral-hover);
   margin-top: 0.4rem;
+  touch-action: manipulation;
 }
 .btn-cta:hover {
   background: var(--coral-press);
@@ -432,6 +433,7 @@ button {
 .leak-share {
   font-size: 0.8rem;
   color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Badges */
