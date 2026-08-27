@@ -1,10 +1,17 @@
 /**
  * Client-side controller. Reads the form, computes with the pure model, updates
  * the results and the URL, and wires copy / print / reset. No network, no
- * analytics. Screen-reader status is debounced so typing is not announced on
- * every keystroke.
+ * analytics. Values are clamped to model bounds and echoed back on commit, so
+ * the fields and the share URL never misrepresent the estimate. Screen-reader
+ * status and URL writes are debounced.
  */
-import { computeLeak, STAGE_ORDER, type Result } from "./model";
+import {
+  computeLeak,
+  STAGE_ORDER,
+  clamp01,
+  clampNonNeg,
+  type Result,
+} from "./model";
 import { formatMoney, formatPercent, formatCount } from "./format";
 import {
   PRACTICE_PRESETS,
@@ -19,6 +26,9 @@ import {
   type FullState,
 } from "./urlState";
 import { COPY } from "./copy";
+
+const MAX_INQ = 100000;
+const MAX_MV = 10000000;
 
 const byId = (id: string) => document.getElementById(id);
 const pct = (f: number) => Math.round(f * 1000) / 10;
@@ -62,6 +72,25 @@ function readForm(): FullState {
       show: inputVal("tShow", pct(DEFAULT_STATE.target.show)) / 100,
       signing: inputVal("tSigning", pct(DEFAULT_STATE.target.signing)) / 100,
     },
+  };
+}
+
+/** Clamp every field to model bounds so the form and URL never lie. */
+function normalize(s: FullState): FullState {
+  const clampRates = (r: FullState["current"]) => ({
+    answer: clamp01(r.answer),
+    response: clamp01(r.response),
+    followup: clamp01(r.followup),
+    show: clamp01(r.show),
+    signing: clamp01(r.signing),
+  });
+  return {
+    inquiriesPerMonth: clampNonNeg(s.inquiriesPerMonth, MAX_INQ),
+    avgMatterValue: clampNonNeg(s.avgMatterValue, MAX_MV),
+    practiceArea: s.practiceArea,
+    closeRate: clamp01(s.closeRate),
+    current: clampRates(s.current),
+    target: clampRates(s.target),
   };
 }
 
@@ -140,27 +169,50 @@ function render(state: FullState): void {
   setText("matters-value", formatCount(r.recoverableMattersPerYear));
 
   const empty = byId("empty-note");
-  if (empty) empty.hidden = r.headlineLeak !== 0;
+  if (empty) (empty as HTMLElement).hidden = r.headlineLeak !== 0;
 
   for (const key of STAGE_ORDER) {
     const s = r.stages.find((x) => x.key === key);
     if (!s) continue;
     setText(`amount-${key}`, formatMoney(s.leak));
-    setText(`share-${key}`, formatPercent(s.sharePct));
+    const atTarget = s.target <= s.current;
+    setText(
+      `share-${key}`,
+      atTarget
+        ? COPY.results.atTargetNote
+        : `${formatPercent(s.sharePct)} ${COPY.results.shareSuffix}`,
+    );
     const seg = byId(`seg-${key}`);
-    if (seg) seg.style.width = `${s.sharePct}%`;
+    if (seg) (seg as HTMLElement).style.width = `${s.sharePct}%`;
   }
 
   renderPrintInputs(state);
   scheduleStatus(r);
 }
 
-function updateURL(state: FullState): void {
-  history.replaceState(null, "", `${location.pathname}?${encodeState(state)}`);
+function writeURLNow(state: FullState): void {
+  try {
+    history.replaceState(null, "", `${location.pathname}?${encodeState(state)}`);
+  } catch {
+    /* Some browsers throttle replaceState; the visible UI already reflects state. */
+  }
 }
 
-function onChange(): void {
-  const state = readForm();
+let urlTimer: number | undefined;
+function updateURL(state: FullState): void {
+  if (urlTimer) window.clearTimeout(urlTimer);
+  urlTimer = window.setTimeout(() => writeURLNow(state), 200);
+}
+
+function handleLive(): void {
+  const state = normalize(readForm());
+  render(state);
+  updateURL(state);
+}
+
+function handleCommit(): void {
+  const state = normalize(readForm());
+  writeForm(state); // echo clamped values back into the fields
   render(state);
   updateURL(state);
 }
@@ -169,32 +221,39 @@ function init(): void {
   const form = byId("calc-form") as HTMLFormElement | null;
   if (!form) return;
 
-  const initial = decodeState(location.search);
+  const initial = normalize(decodeState(location.search));
   writeForm(initial);
   render(initial);
+  // If arriving via a shared link, rewrite the URL to the clamped values.
+  if (location.search) writeURLNow(initial);
 
-  // Selecting a practice area pre-fills the matter value.
+  // Selecting a practice area pre-fills the matter value, then commits.
   const practice = byId("practiceArea") as HTMLSelectElement | null;
   practice?.addEventListener("change", () => {
     const preset = PRACTICE_PRESETS.find((p) => p.id === practice.value);
     const mv = byId("matterValue") as HTMLInputElement | null;
     if (preset && mv) mv.value = String(preset.matterValue);
-    onChange();
+    handleCommit();
   });
 
-  form.addEventListener("input", onChange);
-  form.addEventListener("change", onChange);
+  form.addEventListener("input", handleLive);
+  form.addEventListener("change", handleCommit);
+  form.addEventListener("submit", (e) => e.preventDefault());
 
   byId("btn-reset")?.addEventListener("click", () => {
     writeForm(DEFAULT_STATE);
     render(DEFAULT_STATE);
-    updateURL(DEFAULT_STATE);
+    try {
+      history.replaceState(null, "", location.pathname);
+    } catch {
+      /* ignore */
+    }
   });
 
   byId("btn-print")?.addEventListener("click", () => window.print());
 
   byId("btn-copy")?.addEventListener("click", async () => {
-    updateURL(readForm());
+    writeURLNow(normalize(readForm()));
     const btn = byId("btn-copy");
     try {
       await navigator.clipboard.writeText(location.href);

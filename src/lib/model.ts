@@ -105,17 +105,19 @@ function sanitizeRates(r: Rates): Rates {
  * All clamping and NaN guarding happens here, so callers may pass anything.
  */
 export function computeLeak(inputs: Inputs): Result {
+  // Total function: tolerate a null/undefined input or missing rate containers.
+  const inp = (inputs ?? {}) as Partial<Inputs>;
   const inquiriesPerMonth = clampNonNeg(
-    inputs.inquiriesPerMonth,
+    inp.inquiriesPerMonth,
     MAX_INQUIRIES_PER_MONTH,
   );
   const annualInquiries = inquiriesPerMonth * 12;
-  const avgMatterValue = clampNonNeg(inputs.avgMatterValue, MAX_MATTER_VALUE);
-  const closeRate = clamp01(inputs.closeRate);
+  const avgMatterValue = clampNonNeg(inp.avgMatterValue, MAX_MATTER_VALUE);
+  const closeRate = clamp01(inp.closeRate);
   const ev = closeRate * avgMatterValue;
 
-  const current = sanitizeRates(inputs.current);
-  const rawTarget = sanitizeRates(inputs.target);
+  const current = sanitizeRates((inp.current ?? {}) as Rates);
+  const rawTarget = sanitizeRates((inp.target ?? {}) as Rates);
 
   // Effective target is never below current, so no stage yields a negative leak.
   const target: Rates = {
