@@ -1,0 +1,41 @@
+{
+  "brand": "MHSB Solutions",
+  "version": "4.3",
+  "banned_phrases": [
+    "set it and forget it",
+    "AI will replace your staff",
+    "instant results",
+    "overnight transformation",
+    "guaranteed ROI",
+    "cutting-edge AI",
+    "seamless integration",
+    "AI-powered innovation",
+    "automate. measure. optimize.",
+    "install competence",
+    "our AI handles everything",
+    "your data is completely safe"
+  ],
+  "banned_regexes": [
+    "\\brevolutionary\\b",
+    "\\bdisruptive\\b",
+    "\\bgame-?changing\\b",
+    "\\bbest-?in-?class\\b"
+  ],
+  "warn_phrases": ["AI-powered", "AI transformation", "privacy-compliant"],
+  "warn_regexes": [
+    "\\bfunnel\\b",
+    "\\binstall(s|ed|ing|ation)?\\b",
+    "\\bagile\\b",
+    "\\biterative\\b",
+    "\\bbest practices\\b",
+    "\\bdata analytics\\b",
+    "\\bseamless\\b",
+    "\\bhuman-in-the-loop\\b"
+  ],
+  "banned_hexes": ["#1F4788", "#F1B434", "#1B1F3B", "#2E8B9E"],
+  "retired_fonts": ["Fraunces"],
+  "punctuation": {
+    "forbid_em_dash": true,
+    "forbid_en_dash": true
+  }
+}
