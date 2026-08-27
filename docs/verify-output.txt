@@ -1,0 +1,78 @@
+
+> mhsb-intake-leak-calculator@1.0.0 verify
+> npm run test:unit && npm run build && npm run test:e2e && npm run lint:brand
+
+
+> mhsb-intake-leak-calculator@1.0.0 test:unit
+> vitest run
+
+
+ RUN  v3.2.7 /home/roo/projects/mhsb-intake-leak-calculator
+
+ ✓ src/lib/urlState.test.ts (7 tests) 9ms
+ ✓ src/lib/model.test.ts (15 tests) 24ms
+
+ Test Files  2 passed (2)
+      Tests  22 passed (22)
+   Start at  20:45:57
+   Duration  836ms (transform 182ms, setup 0ms, collect 199ms, tests 32ms, environment 0ms, prepare 296ms)
+
+
+> mhsb-intake-leak-calculator@1.0.0 build
+> astro build
+
+20:46:00 [content] Syncing content
+20:46:00 [content] Synced content
+20:46:00 [types] Generated 69ms
+20:46:00 [build] output: "static"
+20:46:00 [build] mode: "static"
+20:46:00 [build] directory: /home/roo/projects/mhsb-intake-leak-calculator/dist/
+20:46:00 [build] Collecting build info...
+20:46:00 [build] ✓ Completed in 89ms.
+20:46:00 [build] Building static entrypoints...
+20:46:02 [vite] ✓ built in 1.68s
+20:46:02 [build] ✓ Completed in 1.73s.
+
+ building client (vite) 
+20:46:02 [vite] transforming...
+20:46:02 [vite] ✓ 7 modules transformed.
+20:46:02 [vite] rendering chunks...
+20:46:02 [vite] computing gzip size...
+20:46:02 [vite] dist/_astro/index.astro_astro_type_script_index_0_lang.3VVBie-R.js  9.64 kB │ gzip: 3.44 kB
+20:46:02 [vite] ✓ built in 153ms
+
+ generating static routes 
+20:46:02 ▶ src/pages/index.astro
+20:46:02   └─ /index.html (+16ms) 
+20:46:02 ✓ Completed in 27ms.
+
+20:46:02 [build] 1 page(s) built in 2.04s
+20:46:02 [build] Complete!
+
+> mhsb-intake-leak-calculator@1.0.0 test:e2e
+> playwright test
+
+
+Running 8 tests using 2 workers
+
+  ✓  1 [chromium] › tests/smoke.spec.ts:3:1 › renders the default estimate and captures a screenshot (1.1s)
+  ✓  3 [chromium] › tests/smoke.spec.ts:23:1 › recomputes live and reflects state in the URL (1.0s)
+  ✓  2 [chromium] › tests/a11y.spec.ts:25:1 › no WCAG A/AA violations on the default view (2.3s)
+  ✓  4 [chromium] › tests/smoke.spec.ts:38:1 › shares a link that restores the same estimate (1.9s)
+  ✓  6 [chromium] › tests/smoke.spec.ts:62:1 › zero inquiries shows the empty state and a zero headline (387ms)
+  ✓  5 [chromium] › tests/a11y.spec.ts:30:1 › no WCAG A/AA violations after opening benchmarks and entering data (2.3s)
+  ✓  7 [chromium] › tests/smoke.spec.ts:71:1 › the CTA links to the diagnostic URL constant (349ms)
+  ✓  8 [chromium] › tests/a11y.spec.ts:40:1 › no WCAG A/AA violations in the zero / empty state (1.8s)
+
+  8 passed (14.5s)
+
+> mhsb-intake-leak-calculator@1.0.0 lint:brand
+> bash scripts/brand-lint.sh
+
+== brand lint: copy module ==
+brand_lint: MHSB Solutions v4.3 | files scanned: 1
+summary: 0 error(s), 0 warning(s)
+== brand lint: rendered HTML ==
+brand_lint: MHSB Solutions v4.3 | files scanned: 1
+summary: 0 error(s), 0 warning(s)
+brand lint: clean
