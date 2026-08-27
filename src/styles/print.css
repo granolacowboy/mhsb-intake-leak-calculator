@@ -1,0 +1,92 @@
+/* Printable summary. Hides interactive chrome, prints the estimate, the figures
+ * entered, and the sources, in ink-friendly colors. */
+@media print {
+  @page {
+    margin: 1.5cm;
+  }
+
+  html,
+  body {
+    background: #ffffff;
+    color: #384152;
+    font-size: 11pt;
+  }
+
+  .skip-link,
+  .brand-tag,
+  form,
+  .actions,
+  .cta-band,
+  .btn-cta,
+  .no-print {
+    display: none !important;
+  }
+
+  .grid {
+    display: block;
+    padding: 0;
+  }
+
+  /* Ink-friendly headline: white card, slate text, printed border. */
+  .headline-card,
+  .cta-band {
+    background: #ffffff !important;
+    color: #384152 !important;
+    border: 2px solid #384152;
+    box-shadow: none;
+  }
+  .headline-number,
+  .headline-card .headline-label,
+  .headline-sub,
+  .stat {
+    color: #384152 !important;
+  }
+
+  /* Bar segments keep distinct fills so the breakdown is legible in print. */
+  .bar {
+    border: 1px solid #384152;
+  }
+  .badge-sourced {
+    background: #ffffff;
+    color: #384152;
+    border: 1px solid #384152;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .section,
+  .headline-card,
+  .breakdown,
+  .leak-item {
+    break-inside: avoid;
+  }
+
+  a[href]::after {
+    content: "";
+  }
+
+  .print-inputs {
+    margin-top: 1rem;
+    font-size: 10pt;
+  }
+  .print-inputs dl {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.15rem 1rem;
+    justify-content: start;
+  }
+  .print-inputs dt {
+    color: #4f5b6e;
+  }
+  .print-inputs dd {
+    margin: 0;
+    font-weight: 600;
+  }
+}
+
+/* Hidden on screen, revealed only in print. */
+.print-only {
+  display: none;
+}

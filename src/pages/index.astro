@@ -1,0 +1,364 @@
+---
+import Base from "../layouts/Base.astro";
+import { COPY, DIAGNOSTIC_URL } from "../lib/copy";
+import {
+  DEFAULTS,
+  PRACTICE_PRESETS,
+  RESPONSE_BANDS,
+  FOLLOWUP_BANDS,
+  DEFAULT_RESPONSE_BAND,
+  DEFAULT_FOLLOWUP_BAND,
+} from "../lib/presets";
+import { computeLeak, STAGE_ORDER } from "../lib/model";
+import { formatMoney, formatPercent, formatCount } from "../lib/format";
+
+const r = computeLeak(DEFAULTS);
+const pct = (f: number) => Math.round(f * 1000) / 10;
+
+const STAGE_META: Record<string, { seg: string; grade: "sourced" | "assumption" }> = {
+  answer: { seg: "seg-1", grade: "sourced" },
+  response: { seg: "seg-2", grade: "assumption" },
+  followup: { seg: "seg-3", grade: "assumption" },
+  show: { seg: "seg-4", grade: "assumption" },
+  signing: { seg: "seg-5", grade: "assumption" },
+};
+const stageRows = STAGE_ORDER.map((key) => {
+  const s = r.stages.find((x) => x.key === key)!;
+  return { key, s, meta: STAGE_META[key], copy: COPY.stages[key] };
+});
+---
+
+<Base title={`${COPY.hero.title} | ${COPY.brand}`} description={COPY.hero.lede}>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <span class="brand-mark">{COPY.brand}</span>
+      <span class="brand-tag">{COPY.tagline}</span>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+      <section class="hero" aria-labelledby="page-title">
+        <p class="eyebrow">{COPY.hero.eyebrow}</p>
+        <h1 id="page-title">{COPY.hero.title}</h1>
+        <p class="lede">{COPY.hero.lede}</p>
+      </section>
+
+      <div class="grid">
+        <!-- FORM -->
+        <form id="calc-form" novalidate aria-describedby="form-help">
+          <fieldset>
+            <legend>{COPY.form.heading}</legend>
+            <p id="form-help" class="visually-hidden">
+              Results update as you type. Every benchmark is editable.
+            </p>
+
+            <div class="field">
+              <label for="inquiries">{COPY.form.inquiries.label}</label>
+              <input
+                type="number"
+                id="inquiries"
+                name="inquiries"
+                inputmode="numeric"
+                min="0"
+                max="100000"
+                step="1"
+                autocomplete="off"
+                value={DEFAULTS.inquiriesPerMonth}
+              />
+              <p class="help">{COPY.form.inquiries.help}</p>
+            </div>
+
+            <div class="field">
+              <label for="practiceArea">{COPY.form.practiceArea.label}</label>
+              <select id="practiceArea" name="practiceArea">
+                {
+                  PRACTICE_PRESETS.map((p) => (
+                    <option value={p.id} selected={p.id === "general"}>
+                      {p.label}
+                    </option>
+                  ))
+                }
+              </select>
+              <p class="help">{COPY.form.practiceArea.help}</p>
+            </div>
+
+            <div class="field">
+              <label for="matterValue">{COPY.form.matterValue.label}</label>
+              <div class="input-affix prefix">
+                <span class="affix" aria-hidden="true">$</span>
+                <input
+                  type="number"
+                  id="matterValue"
+                  name="matterValue"
+                  inputmode="numeric"
+                  min="0"
+                  max="10000000"
+                  step="100"
+                  autocomplete="off"
+                  value={DEFAULTS.avgMatterValue}
+                />
+              </div>
+              <p class="help">{COPY.form.matterValue.help}</p>
+            </div>
+
+            <div class="field">
+              <label for="answerRate">{COPY.form.answerRate.label}</label>
+              <div class="input-affix">
+                <input
+                  type="number"
+                  id="answerRate"
+                  name="answerRate"
+                  inputmode="numeric"
+                  min="0"
+                  max="100"
+                  step="1"
+                  autocomplete="off"
+                  value={pct(DEFAULTS.current.answer)}
+                />
+                <span class="affix" aria-hidden="true">%</span>
+              </div>
+              <p class="help">{COPY.form.answerRate.help}</p>
+            </div>
+
+            <div class="field">
+              <label for="responseBand">{COPY.form.responseTime.label}</label>
+              <select id="responseBand" name="responseBand">
+                {
+                  RESPONSE_BANDS.map((b) => (
+                    <option value={b.id} selected={b.id === DEFAULT_RESPONSE_BAND}>
+                      {b.label}
+                    </option>
+                  ))
+                }
+              </select>
+              <p class="help">{COPY.form.responseTime.help}</p>
+            </div>
+
+            <div class="field">
+              <label for="followupBand">{COPY.form.followupAttempts.label}</label>
+              <select id="followupBand" name="followupBand">
+                {
+                  FOLLOWUP_BANDS.map((b) => (
+                    <option value={b.id} selected={b.id === DEFAULT_FOLLOWUP_BAND}>
+                      {b.label}
+                    </option>
+                  ))
+                }
+              </select>
+              <p class="help">{COPY.form.followupAttempts.help}</p>
+            </div>
+
+            <div class="field">
+              <label for="showRate">{COPY.form.showRate.label}</label>
+              <div class="input-affix">
+                <input
+                  type="number"
+                  id="showRate"
+                  name="showRate"
+                  inputmode="numeric"
+                  min="0"
+                  max="100"
+                  step="1"
+                  autocomplete="off"
+                  value={pct(DEFAULTS.current.show)}
+                />
+                <span class="affix" aria-hidden="true">%</span>
+              </div>
+              <p class="help">{COPY.form.showRate.help}</p>
+            </div>
+
+            <div class="field">
+              <label for="signingRate">{COPY.form.signingRate.label}</label>
+              <div class="input-affix">
+                <input
+                  type="number"
+                  id="signingRate"
+                  name="signingRate"
+                  inputmode="numeric"
+                  min="0"
+                  max="100"
+                  step="1"
+                  autocomplete="off"
+                  value={pct(DEFAULTS.current.signing)}
+                />
+                <span class="affix" aria-hidden="true">%</span>
+              </div>
+              <p class="help">{COPY.form.signingRate.help}</p>
+            </div>
+          </fieldset>
+
+          <details class="advanced">
+            <summary>{COPY.form.advancedToggle}</summary>
+            <p class="advanced-intro">{COPY.form.advancedIntro}</p>
+
+            <div class="field">
+              <label for="closeRate">{COPY.form.closeRate.label}</label>
+              <div class="input-affix">
+                <input
+                  type="number"
+                  id="closeRate"
+                  name="closeRate"
+                  inputmode="numeric"
+                  min="0"
+                  max="100"
+                  step="1"
+                  autocomplete="off"
+                  value={pct(DEFAULTS.closeRate)}
+                />
+                <span class="affix" aria-hidden="true">%</span>
+              </div>
+              <p class="help">{COPY.form.closeRate.help}</p>
+            </div>
+
+            <div class="target-grid">
+              <div class="field">
+                <label for="tAnswer">{COPY.form.targetPrefix}: {COPY.stages.answer.label}</label>
+                <div class="input-affix">
+                  <input type="number" id="tAnswer" inputmode="numeric" min="0" max="100" step="1" autocomplete="off" value={pct(DEFAULTS.target.answer)} />
+                  <span class="affix" aria-hidden="true">%</span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="tResponse">{COPY.form.targetPrefix}: {COPY.stages.response.label}</label>
+                <div class="input-affix">
+                  <input type="number" id="tResponse" inputmode="numeric" min="0" max="100" step="1" autocomplete="off" value={pct(DEFAULTS.target.response)} />
+                  <span class="affix" aria-hidden="true">%</span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="tFollowup">{COPY.form.targetPrefix}: {COPY.stages.followup.label}</label>
+                <div class="input-affix">
+                  <input type="number" id="tFollowup" inputmode="numeric" min="0" max="100" step="1" autocomplete="off" value={pct(DEFAULTS.target.followup)} />
+                  <span class="affix" aria-hidden="true">%</span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="tShow">{COPY.form.targetPrefix}: {COPY.stages.show.label}</label>
+                <div class="input-affix">
+                  <input type="number" id="tShow" inputmode="numeric" min="0" max="100" step="1" autocomplete="off" value={pct(DEFAULTS.target.show)} />
+                  <span class="affix" aria-hidden="true">%</span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="tSigning">{COPY.form.targetPrefix}: {COPY.stages.signing.label}</label>
+                <div class="input-affix">
+                  <input type="number" id="tSigning" inputmode="numeric" min="0" max="100" step="1" autocomplete="off" value={pct(DEFAULTS.target.signing)} />
+                  <span class="affix" aria-hidden="true">%</span>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <div class="actions no-print">
+            <button type="button" id="btn-copy" class="btn-secondary">{COPY.actions.copyLink}</button>
+            <button type="button" id="btn-print" class="btn-secondary">{COPY.actions.print}</button>
+            <button type="button" id="btn-reset" class="btn-secondary">{COPY.form.reset}</button>
+          </div>
+        </form>
+
+        <!-- RESULTS -->
+        <section class="results" aria-labelledby="results-heading">
+          <h2 id="results-heading" class="visually-hidden">{COPY.results.heading}</h2>
+          <p class="visually-hidden" id="a11y-status" aria-live="polite"></p>
+
+          <div class="headline-card">
+            <p class="headline-label">{COPY.results.headlineLabel}</p>
+            <div class="headline-number" id="headline-number">{formatMoney(r.headlineLeak)}</div>
+            <p class="headline-sub">{COPY.results.headlineSub}</p>
+            <div class="stat-row">
+              <span class="stat">{COPY.results.capturedLabel} <b id="captured-value">{formatMoney(r.currentCapturedRevenue)}</b> {COPY.results.capturedSuffix}</span>
+              <span class="stat">{COPY.results.mattersLabel}: <b id="matters-value">{formatCount(r.recoverableMattersPerYear)}</b></span>
+            </div>
+          </div>
+
+          <div class="breakdown">
+            <h3>{COPY.results.breakdownHeading}</h3>
+            <p id="empty-note" class="note" hidden>{COPY.results.emptyState}</p>
+            <div class="bar" role="img" aria-label="Share of recoverable revenue by stage">
+              {
+                stageRows.map(({ key, s, meta }) => (
+                  <span
+                    class={`seg ${meta.seg}`}
+                    id={`seg-${key}`}
+                    style={`width:${s.sharePct}%`}
+                  />
+                ))
+              }
+            </div>
+
+            <ul class="leak-list">
+              {
+                stageRows.map(({ key, s, meta, copy }) => (
+                  <li class="leak-item">
+                    <span class={`leak-swatch ${meta.seg}`} aria-hidden="true" />
+                    <div class="leak-main">
+                      <span class="leak-label">
+                        {copy.label}
+                        <span
+                          class={`badge ${meta.grade === "sourced" ? "badge-sourced" : "badge-assumption"}`}
+                          title={meta.grade === "sourced" ? COPY.badges.sourcedTitle : COPY.badges.assumptionTitle}
+                        >
+                          {meta.grade === "sourced" ? COPY.badges.sourced : COPY.badges.assumption}
+                        </span>
+                      </span>
+                      <p class="leak-note">{copy.note}</p>
+                    </div>
+                    <div class="leak-figures">
+                      <div class="leak-amount" id={`amount-${key}`}>{formatMoney(s.leak)}</div>
+                      <div class="leak-share"><span id={`share-${key}`}>{formatPercent(s.sharePct)}</span> {COPY.results.shareSuffix}</div>
+                    </div>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <div class="print-inputs print-only">
+            <h3>Figures you entered</h3>
+            <dl id="print-inputs-dl"></dl>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- METHODOLOGY -->
+    <section class="section alt" aria-labelledby="method-heading">
+      <div class="wrap">
+        <h2 id="method-heading">{COPY.methodology.heading}</h2>
+        <p>{COPY.methodology.body}</p>
+        <h3>{COPY.methodology.sourcesHeading}</h3>
+        <ul class="source-list">
+          {COPY.methodology.sources.map((sItem) => <li>{sItem}</li>)}
+        </ul>
+        <p class="note">{COPY.methodology.assumptionsNote}</p>
+        <p class="note">{COPY.methodology.accessed}</p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section" aria-labelledby="cta-heading">
+      <div class="wrap">
+        <div class="cta-band">
+          <h2 id="cta-heading">{COPY.cta.heading}</h2>
+          <p>{COPY.cta.body}</p>
+          <a class="btn-cta" href={DIAGNOSTIC_URL} rel="noopener">{COPY.cta.button}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p class="foot-line">{COPY.footer.line}</p>
+      <p><a href="https://www.mhsbsolutions.com/">{COPY.footer.home}</a></p>
+      <p class="note">{COPY.footer.disclaimer}</p>
+    </div>
+  </footer>
+
+  <script>
+    import "../lib/ui";
+  </script>
+</Base>
