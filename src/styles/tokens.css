@@ -1,0 +1,43 @@
+/*
+ * MHSB brand v4.3 tokens (Coral / Slate, white-based). Dark mode is off by
+ * brand decision. Only WCAG-verified pairings from the v4.3 table are used for
+ * text: Slate on White 10.26:1, Light Slate on White 6.88:1, White on Slate
+ * 10.26:1, White on Coral for large bold CTA labels only. Coral is never body
+ * or link text (2.98:1 on white).
+ */
+:root {
+  --coral: #f26c56; /* bright brand accent; decorative / non-text only (2.98:1 on white) */
+  --coral-hover: #d95a45; /* Dark Coral; white label at >=14pt bold is 3.78:1 (AA large) */
+  --coral-press: #b84835; /* Dark Coral pressed state */
+  --coral-soft: #f5897a; /* subtle highlight */
+  --slate: #384152; /* primary dark; body text on white */
+  --slate-deep: #2b3240; /* darkest surface */
+  --slate-light: #4f5b6e; /* secondary text */
+  --white: #ffffff;
+  --gray-100: #f1f1f1; /* light gray alternate panel */
+  --gray-200: #e2e2e2; /* hairline on white */
+  --gray-300: #d0d0d0; /* borders */
+
+  /* semantic */
+  --bg: var(--white);
+  --bg-alt: var(--gray-100);
+  --surface-dark: var(--slate);
+  --text: var(--slate);
+  --text-secondary: var(--slate-light);
+  --text-on-dark: var(--white);
+  --border: var(--gray-300);
+  --border-soft: var(--gray-200);
+  --focus-ring: var(--slate);
+
+  --font-display: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --maxw: 60rem;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md:
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
