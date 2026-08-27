@@ -69,11 +69,13 @@ state what it does not cover.
 | G1: MODEL.md complete, every coefficient sourced or ASSUMPTION | PASS | `MODEL.md`, committed alone as first commit |
 | G2: build passes, captured | PASS | `docs/build-output.txt` (exit 0) |
 | Unit tests (model + URL state) | PASS | 22 tests: zero, 100%, overrides, NaN/Infinity, rounding reconciliation, no-divide branch, totality, URL round-trip |
-| Smoke test (fills form, asserts result, share round-trip) | PASS | `tests/smoke.spec.ts`, 5 tests |
+| Smoke test (fills form, asserts result, share round-trip, print view) | PASS | `tests/smoke.spec.ts`, 6 tests |
+| Print summary (form hidden, figures-entered table renders) | PASS | print-media test asserts form hidden and 8 figures listed; `docs/screenshot-print.png` |
 | a11y (axe-core, WCAG A/AA) | PASS | 0 violations on default, interacted, and empty states |
 | Brand lint (client copy + rendered HTML) | PASS | 0 errors, 0 warnings |
 | Type check (`astro check`) | PASS | 0 errors (1 hint: execCommand fallback) |
-| Screenshot in docs/ | PASS | `docs/screenshot-desktop.png` |
+| Screenshots in docs/ | PASS | `docs/screenshot-desktop.png`, `docs/screenshot-print.png` |
+| Data boundary (rule 4) | PASS | grep of deliverables + vault notes finds no client identifiers (only MHSB's own org/repo names) |
 | G3: skeptic attacks model + copy | PASS | see below |
 
 **Lint scope:** the brand lint runs over client-visible strings only (the copy
