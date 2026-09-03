@@ -56,7 +56,6 @@ npm run verify             # unit + build + e2e + brand lint in sequence
 
 ```
 MODEL.md                 the model and its sources (source of truth)
-CALCULATOR_REPORT.md     build report + queued deploy actions
 brand-config.json        brand lint configuration (v4.3 values)
 scripts/brand_lint.py    vendored config-driven brand lint
 scripts/brand-lint.sh    wrapper: lints the copy module + rendered HTML only
@@ -82,6 +81,7 @@ with zero WCAG A/AA violations. The brand lint (client copy only) is clean.
 
 ## Deploy
 
-This repository is standalone and has no remote. Deployment is a set of queued
-human actions documented in [CALCULATOR_REPORT.md](./CALCULATOR_REPORT.md). No
-deploy, push, or DNS change is performed by the build.
+The tool is a static build (`npm run build` → `dist/`), intended to ship as a route on
+mhsbsolutions.com. Promoting it to production — and any hosting or DNS change — is a
+deliberate manual step, not something the build performs; nothing here pushes, deploys,
+or makes network calls at build or runtime.
