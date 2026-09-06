@@ -82,6 +82,6 @@ with zero WCAG A/AA violations. The brand lint (client copy only) is clean.
 ## Deploy
 
 The tool is a static build (`npm run build` → `dist/`), intended to ship as a route on
-mhsbsolutions.com. Promoting it to production — and any hosting or DNS change — is a
+mhsbsolutions.com. Promoting it to production, and any hosting or DNS change, is a
 deliberate manual step, not something the build performs; nothing here pushes, deploys,
 or makes network calls at build or runtime.
