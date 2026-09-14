@@ -1,5 +1,8 @@
 # Intake Revenue Leak Calculator
 
+[![Live tool](https://img.shields.io/badge/live-mhsbsolutions.com%2Ftools-1f6feb.svg)](https://www.mhsbsolutions.com/tools/intake-revenue-leak-calculator/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 A standalone, static web tool for mhsbsolutions.com. A law firm owner enters
 their intake numbers in about three minutes and sees an estimate of the annual
 revenue they could recover by closing intake gaps, broken down across five
@@ -19,18 +22,20 @@ The math and every coefficient live in [MODEL.md](./MODEL.md). Summary:
   headline.
 - The framing is deliberately conservative (it ignores the compounding of fixing
   several stages at once) so it does not overclaim.
-- Every coefficient is **sourced** (Clio 2024 Legal Trends Report, MIT 2007
-  Lead Response Management Study, HBR 2011) or marked **ASSUMPTION** and shown
-  with that badge in the UI. Nothing unsourced is presented as fact. Every value
-  is overridable.
+- The one sourced coefficient default is the current 40% answer rate, from the
+  Clio 2024 Legal Trends Report (a firm-level mystery-shopper share, labeled as
+  such in the UI). Every other coefficient default is marked **ASSUMPTION**,
+  badged in the UI, and overridable. MIT 2007 and HBR 2011 support the direction
+  of the response stage only; they never enter the math. Nothing unsourced is
+  presented as fact.
 
 ## Tech
 
 Astro 5 (static) + TypeScript, plain CSS with the MHSB v4.3 brand tokens as
 custom properties, vanilla client-side TypeScript (no UI framework). Chosen to
-mirror the mhsbsolutions.com stack so it can later merge into the main site as a
-route. Vitest for the model unit tests, Playwright + axe-core for the smoke and
-accessibility tests.
+mirror the mhsbsolutions.com stack, the site that serves the live route. Vitest
+for the model unit tests, Playwright + axe-core for the smoke and accessibility
+tests.
 
 ## Quickstart
 
@@ -44,10 +49,10 @@ npm run preview    # serve the build
 ## Verify
 
 ```bash
-npm run test:unit          # Vitest: model + URL state (21 tests)
+npm run test:unit          # Vitest: model + URL state (22 tests)
 npx playwright install chromium   # once, for the browser tests
 npm run test:e2e           # Playwright: smoke fills the form and asserts a result; axe checks a11y
-npm run lint:brand         # brand banned-phrase / dash / legacy-hex / retired-font gate over client copy
+npm run lint:brand         # brand banned-phrase / dash / legacy-hex / retired-font lint over client copy
 npx astro check            # type check
 npm run verify             # unit + build + e2e + brand lint in sequence
 ```
@@ -62,12 +67,13 @@ scripts/brand-lint.sh    wrapper: lints the copy module + rendered HTML only
 src/lib/model.ts         pure, total leak model (framework-free)
 src/lib/model.test.ts    unit tests (edge cases, guards, rounding)
 src/lib/urlState.ts      shareable URL-encoded state
+src/lib/urlState.test.ts unit tests for URL encode/decode round-trips
 src/lib/presets.ts       defaults, practice-area presets, helper mappings
 src/lib/copy.ts          every client-visible string (brand-lint target)
 src/lib/format.ts        Intl money / percent / count formatting
 src/lib/ui.ts            client controller (reads form, computes, syncs URL)
 src/pages/index.astro    the page (server-renders default results)
-src/styles/*.css         tokens, base, print
+src/styles/*.css         tokens, global, print
 tests/                   Playwright smoke + a11y specs
 docs/                    build log, screenshot
 ```
@@ -81,7 +87,14 @@ with zero WCAG A/AA violations. The brand lint (client copy only) is clean.
 
 ## Deploy
 
-The tool is a static build (`npm run build` → `dist/`), intended to ship as a route on
-mhsbsolutions.com. Promoting it to production, and any hosting or DNS change, is a
-deliberate manual step, not something the build performs; nothing here pushes, deploys,
-or makes network calls at build or runtime.
+The tool is live at
+https://www.mhsbsolutions.com/tools/intake-revenue-leak-calculator/ as a route on
+the mhsbsolutions.com site. This repository is the standalone source it was built
+from; it ships as a static build (`npm run build` produces `dist/`). Nothing here
+pushes, deploys, or makes network calls: there is no CI or hosting config in the
+repo, and promoting a new version or any hosting or DNS change is a deliberate
+manual step performed elsewhere.
+
+## License
+
+MIT. See [LICENSE](./LICENSE).
