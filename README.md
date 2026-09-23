@@ -17,6 +17,8 @@ email capture, no network calls at runtime. Fonts are self-hosted.
 
 > **Try the production version:** [mhsbsolutions.com/tools/intake-revenue-leak-calculator](https://www.mhsbsolutions.com/tools/intake-revenue-leak-calculator/)
 
+> **Engineering note:** [How I use AI agents to build deterministic systems without trusting the agents to be deterministic](https://granolacowboy.dev/writing/post-4-deterministic-ai) describes the verification philosophy shared by this project.
+
 ## Model
 
 The math and every coefficient live in [MODEL.md](./MODEL.md). Summary:
