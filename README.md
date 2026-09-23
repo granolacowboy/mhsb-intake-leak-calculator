@@ -1,5 +1,6 @@
 # Intake Revenue Leak Calculator
 
+[![CI](https://github.com/granolacowboy/mhsb-intake-leak-calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/granolacowboy/mhsb-intake-leak-calculator/actions/workflows/ci.yml)
 [![Live tool](https://img.shields.io/badge/live-mhsbsolutions.com%2Ftools-1f6feb.svg)](https://www.mhsbsolutions.com/tools/intake-revenue-leak-calculator/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
@@ -11,6 +12,10 @@ no-shows, and unsigned engagement letters.
 
 Zero backend. All computation runs in the browser. No analytics, no tracking, no
 email capture, no network calls at runtime. Fonts are self-hosted.
+
+[![Intake Revenue Leak Calculator screenshot](docs/screenshot-desktop.png)](https://www.mhsbsolutions.com/tools/intake-revenue-leak-calculator/)
+
+> **Try the production version:** [mhsbsolutions.com/tools/intake-revenue-leak-calculator](https://www.mhsbsolutions.com/tools/intake-revenue-leak-calculator/)
 
 ## Model
 
@@ -56,6 +61,8 @@ npm run lint:brand         # brand banned-phrase / dash / legacy-hex / retired-f
 npx astro check            # type check
 npm run verify             # unit + build + e2e + brand lint in sequence
 ```
+
+The GitHub Actions CI workflow runs the same verification path on every pull request and push to `main`, including Chromium-based Playwright smoke and accessibility checks.
 
 ## Structure
 
