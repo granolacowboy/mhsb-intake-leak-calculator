@@ -1,6 +1,6 @@
 # Intake Revenue Leak Calculator
 
-[![CI](https://github.com/granolacowboy/mhsb-intake-leak-calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/granolacowboy/mhsb-intake-leak-calculator/actions/workflows/ci.yml)
+[![Verified](https://github.com/granolacowboy/granolacowboy.dev/actions/workflows/verify-intake-leak-calculator.yml/badge.svg)](https://github.com/granolacowboy/granolacowboy.dev/actions/workflows/verify-intake-leak-calculator.yml)
 [![Live tool](https://img.shields.io/badge/live-mhsbsolutions.com%2Ftools-1f6feb.svg)](https://www.mhsbsolutions.com/tools/intake-revenue-leak-calculator/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
@@ -64,7 +64,7 @@ npx astro check            # type check
 npm run verify             # unit + build + e2e + brand lint in sequence
 ```
 
-The GitHub Actions CI workflow runs the same verification path on every pull request and push to `main`, including Chromium-based Playwright smoke and accessibility checks.
+The central portfolio verifier runs the same verification path against `main`, including Chromium-based Playwright smoke and accessibility checks, on the working self-hosted portfolio runner.
 
 ## Structure
 
