@@ -38,7 +38,7 @@ The math and every coefficient live in [MODEL.md](./MODEL.md). Summary:
 
 ## Tech
 
-Astro 5 (static) + TypeScript, plain CSS with the MHSB v4.3 brand tokens as
+Astro 7 (static) + TypeScript, plain CSS with the MHSB v4.3 brand tokens as
 custom properties, vanilla client-side TypeScript (no UI framework). Chosen to
 mirror the mhsbsolutions.com stack, the site that serves the live route. Vitest
 for the model unit tests, Playwright + axe-core for the smoke and accessibility
