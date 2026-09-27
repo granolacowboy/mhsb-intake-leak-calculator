@@ -29,3 +29,7 @@ A PR affecting UI behavior should keep the Playwright smoke test and axe accessi
 The production artifact is browser-only: no backend, analytics, tracking, email capture, or runtime network calls. A proposal to add any of those is an architectural change and should be called out explicitly rather than introduced as an incidental dependency.
 
 Do not commit client, matter, analytics, or other personal data.
+
+## Public Git history
+
+Preserve useful engineering rationale in commits and pull requests, but keep agent/model attribution, session provenance, prompt transcripts, and tool chatter out of the public history. See the [account-level public development policy](https://github.com/granolacowboy/.github/blob/main/PUBLIC_DEVELOPMENT.md).
