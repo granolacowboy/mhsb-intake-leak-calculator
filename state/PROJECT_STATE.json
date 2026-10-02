@@ -1,0 +1,21 @@
+{
+  "project": "mhsb-intake-leak-calculator",
+  "base_sha": "63cc25775ff5fb725c4572774948825daf197a16",
+  "phase": "maintenance: live static tool; on remediation branch fix/intake-referer-leak",
+  "definition_of_done": [
+    {
+      "id": "dod-verify",
+      "desc": "npm run verify passes from a clean checkout (vitest unit, astro build, playwright e2e, brand lint)",
+      "status": "todo",
+      "evidence": ""
+    }
+  ],
+  "blocking_gates": [],
+  "next_actions": [
+    "Reverify: npm ci && npm run verify",
+    "Merge fix/intake-referer-leak to main and redeploy the live /tools route only under operator gate"
+  ],
+  "decisions_ref": "state/DECISIONS.md",
+  "updated_at": "2026-10-02T05:56:50Z",
+  "updated_by": "claude-code"
+}
