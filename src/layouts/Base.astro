@@ -22,6 +22,9 @@ const { title, description } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Page-level no-referrer: the entered figures live in the URL query, so no
+         anchor (same-origin CTA included) may leak the full path via Referer. -->
+    <meta name="referrer" content="no-referrer" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#ffffff" />
